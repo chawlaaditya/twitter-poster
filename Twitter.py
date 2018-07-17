@@ -6,28 +6,23 @@ api = api = twitter.Api(consumer_key='',
                       access_token_key='',
                       access_token_secret='')
 
-
-search_results = api.GetSearch(term = "crispr", count = 2)
-
+search_results = api.GetSearch(term = "crispr", count = 2) #Find new CRISPR science articles.
 
 def tweet():
     for result in search_results:
-        if result.favorite_count > 100:
+        if result.favorite_count > 100: #Get URLs with good traction (>100 favourites)
             api.PostUpdate(result.text)
         else:
-            print("Already tweeted for today.")
+            print("No good articles today. :(")
 
 number_of_tweets = 0
 
 while True:
-    print("Looking for interesting articles...")
-    if number_of_tweets <= 2:
+    try:
+        if number_of_tweets <= 2: #Only tweets 2 articles per day.
+            tweet()
+            number_of_tweets += 1
+    except twitter.error.TwitterError as err:
+        print(err)
+        time.sleep(60*60*3) #Wait 3 hours before posting.
         tweet()
-        print("Tweeted!")
-        number_of_tweets += 1
-    else:
-        print("Wait!")
-        time.sleep(60*60*6)
-        tweet()
-
-
