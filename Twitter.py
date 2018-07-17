@@ -20,10 +20,14 @@ def tweet():
 number_of_tweets = 0
 
 while True:
+    print("Looking for interesting articles...")
     if number_of_tweets <= 2:
         tweet()
+        print("Tweeted!")
         number_of_tweets += 1
     else:
+        print("Wait!")
         time.sleep(60*60*6)
         tweet()
+
 
